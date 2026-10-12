@@ -1,0 +1,28 @@
+name: ci
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+      - run: npm run build
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - name: Browser end-to-end
+        run: |
+          DATA_DIR=$(mktemp -d) LOG_LEVEL=warn node server/dist/index.js &
+          for i in $(seq 30); do curl -sf http://localhost:8080/v1/health && break; sleep 1; done
+          npm run e2e
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t obscura:ci .

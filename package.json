@@ -1,0 +1,31 @@
+{
+  "name": "obscura",
+  "version": "1.0.0",
+  "private": true,
+  "description": "End-to-end encrypted messenger with post-quantum key agreement and a hybrid double ratchet",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "build": "npm run build -w @obscura/core && npm run build -w @obscura/server && npm run build -w @obscura/web",
+    "test": "vitest run",
+    "dev:server": "npm run dev -w @obscura/server",
+    "dev:web": "npm run dev -w @obscura/web",
+    "start": "node --disable-warning=ExperimentalWarning server/dist/index.js",
+    "e2e": "node scripts/e2e-browser.mjs"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/ws": "^8.18.2",
+    "playwright": "^1.56.1",
+    "typescript": "5.9",
+    "vitest": "^5.0.3"
+  }
+}

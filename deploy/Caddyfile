@@ -1,0 +1,5 @@
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy obscura:8080
+	header Strict-Transport-Security "max-age=63072000; includeSubDomains"
+}
